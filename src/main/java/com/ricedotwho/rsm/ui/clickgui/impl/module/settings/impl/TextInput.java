@@ -47,6 +47,10 @@ public class TextInput implements Accessor {
         saveState();
     }
 
+    public TextInput(String value, int textSize, boolean number, int maxLength, boolean secure) {
+        this(value, textSize, number ? NUMBER_ALLOWED : STRING_ALLOWED, maxLength, secure);
+    }
+
     public TextInput(String value, int textSize, boolean number, boolean secure) {
         this(value, textSize, number ? NUMBER_ALLOWED : STRING_ALLOWED, 32, secure);
     }
