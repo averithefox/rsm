@@ -34,8 +34,6 @@ public class P3Qol extends Module {
     private final StringSetting sectionContent = new StringSetting("Secion", "Section Complete");
     private final NumberSetting volume = new NumberSetting("Volume", 0f, 20f, 5f, 0.1);
 
-    private final StringSetting test = new StringSetting("asd", "", null, true, false, 512);
-
     public P3Qol() {
         this.registerProperty(
                 deviceDone,
@@ -43,8 +41,7 @@ public class P3Qol extends Module {
                 deviceContent,
                 sectionDone,
                 sectionDoneColour,
-                volume,
-                test
+                volume
         );
     }
 
