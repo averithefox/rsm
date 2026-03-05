@@ -34,7 +34,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-
     def lwjglVersion = property("minecraft_lwjgl_version")
     modImplementation "org.lwjgl:lwjgl-nanovg:$lwjglVersion"
     include "org.lwjgl:lwjgl-nanovg:$lwjglVersion"

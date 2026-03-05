@@ -28,6 +28,7 @@ import com.ricedotwho.rsm.module.impl.movement.NullBinds;
 import com.ricedotwho.rsm.module.impl.player.ChestHitFix;
 import com.ricedotwho.rsm.module.impl.render.*;
 import com.ricedotwho.rsm.module.impl.render.hud.Hud;
+import com.ricedotwho.rsm.module.impl.render.ImageHud;
 import com.ricedotwho.rsm.module.impl.render.visualwords.VisualWords;
 import com.ricedotwho.rsm.ui.clickgui.RSMConfig;
 import com.ricedotwho.rsm.ui.clickgui.RSMGuiEditor;
@@ -99,7 +100,8 @@ public class RSM implements ClientModInitializer {
             ChestHitFix.class,
             P3Qol.class,
             VisualWords.class,
-            Hud.class
+            Hud.class,
+            ImageHud.class
     );
 
     private final List<Class<? extends Command>> COMMANDS = Arrays.asList(
@@ -109,7 +111,8 @@ public class RSM implements ClientModInitializer {
             OpenGuiEditCommand.class,
             AddonCommand.class,
             DevCommand.class,
-            VisualWordCommand.class
+            VisualWordCommand.class,
+            ImageHudCommand.class
     );
 
     private final List<Class<? extends ModComponent>> COMPONENTS = Arrays.asList(

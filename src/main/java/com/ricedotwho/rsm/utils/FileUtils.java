@@ -3,6 +3,7 @@ package com.ricedotwho.rsm.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ricedotwho.rsm.RSM;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 import java.io.File;
@@ -14,7 +15,9 @@ import java.nio.file.Files;
 
 @UtilityClass
 public class FileUtils {
+    @Getter
     private final  Gson gson = new Gson();
+    @Getter
     private final  Gson pgson = new GsonBuilder().setPrettyPrinting().create();
     public final File file_path = new File("config");
 

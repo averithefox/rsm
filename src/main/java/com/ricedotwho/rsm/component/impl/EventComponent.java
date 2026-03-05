@@ -13,6 +13,7 @@ import com.ricedotwho.rsm.event.impl.render.Render3DEvent;
 import com.ricedotwho.rsm.event.impl.world.BlockChangeEvent;
 import com.ricedotwho.rsm.event.impl.world.WorldEvent;
 import com.ricedotwho.rsm.mixins.accessor.AccessorClientboundSectionBlocksUpdatePacket;
+import com.ricedotwho.rsm.utils.ChatUtils;
 import com.ricedotwho.rsm.utils.Utils;
 import lombok.Getter;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -117,17 +118,14 @@ public class EventComponent extends ModComponent {
     }
 
     @SubscribeEvent
-    public void onServerTick(PacketEvent.Receive event) {
-        if (event.getPacket() instanceof ClientboundPingPacket packet && packet.getId() != 0) {
-            totalWorldTime++;
-            new ServerTickEvent(packet.getId(), totalWorldTime).post();
-        }
-    }
-
-    @SubscribeEvent
     public void onTimeUpdate(PacketEvent.Receive event) {
         if (event.getPacket() instanceof ClientboundSetTimePacket packet) {
             totalWorldTime = packet.gameTime();
         }
+    }
+
+    public static void onServerTick(int id) {
+        totalWorldTime++;
+        new ServerTickEvent(id, totalWorldTime).post();
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.Packet;
 
 @Getter
 public class PacketEvent extends Event {
-	private Packet<?> packet;
+	private final Packet<?> packet;
 
 	public PacketEvent(Packet<?> packet) {
 		this.packet = packet;

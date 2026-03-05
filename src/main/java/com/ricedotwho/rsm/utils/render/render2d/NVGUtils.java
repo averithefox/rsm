@@ -2,6 +2,7 @@ package com.ricedotwho.rsm.utils.render.render2d;
 
 import com.mojang.blaze3d.platform.Window;
 import com.ricedotwho.rsm.data.Colour;
+import com.ricedotwho.rsm.data.Pair;
 import com.ricedotwho.rsm.ui.clickgui.RSMConfig;
 import com.ricedotwho.rsm.utils.Accessor;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,14 @@ import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
+import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.stb.STBImage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -432,6 +438,10 @@ public class NVGUtils implements Accessor {
         }
     }
 
+    public boolean hasImage(Image image) {
+        return images.containsKey(image);
+    }
+
     public void renderImage(Image image, float x, float y, float w, float h, float r, float alpha) {
         nvgImagePattern(vg, x, y, w, h, 0f, getImage(image), alpha, nvgPaint);
         nvgBeginPath(vg);
@@ -454,6 +464,7 @@ public class NVGUtils implements Accessor {
 
         // todo: svg
         images.put(image, new NVGImage(0, loadImage(image)));
+        image.loadDims();
         return image;
     }
 
@@ -463,6 +474,17 @@ public class NVGUtils implements Accessor {
 
         // todo: svg
         images.put(image, new NVGImage(0, loadImage(image)));
+        image.loadDims();
+        return image;
+    }
+
+    public Image createImage(String path, InputStream stream) {
+        Optional<Image> opt = images.keySet().stream().filter(i -> Objects.equals(i.getIdentifier(), path)).findFirst();
+        Image image = opt.orElseGet(() -> new Image(path, stream));
+
+        // todo: svg
+        images.put(image, new NVGImage(0, loadImage(image)));
+        image.loadDims();
         return image;
     }
 
@@ -472,7 +494,25 @@ public class NVGUtils implements Accessor {
 
         // todo: svg
         images.put(image, new NVGImage(0, loadImage(image)));
+        image.loadDims();
         return image;
+    }
+
+    public Image createImage(String id, BufferedImage bufferedImage) {
+        return createImage(id, bufferedImageToPNGByteBuffer(bufferedImage));
+    }
+
+    public static ByteBuffer bufferedImageToPNGByteBuffer(BufferedImage image) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "png", baos);
+            byte[] bytes = baos.toByteArray();
+            ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
+            buffer.put(bytes);
+            buffer.flip();
+            return buffer;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /// lowers reference count by 1, if it reaches 0 it gets deleted from mem
@@ -484,6 +524,23 @@ public class NVGUtils implements Accessor {
             nvgDeleteImage(vg, nvgImage.nvg);
             images.remove(image);
         }
+    }
+
+    public void deleteImageFully(Image image) {
+        NVGImage nvgImage = images.remove(image);
+        if (nvgImage == null) return;
+        nvgDeleteImage(vg, nvgImage.nvg);
+    }
+
+    public static Pair<Integer, Integer> getImageSize(Image image) {
+        NVGImage nvgImage = images.get(image);
+        if (nvgImage == null) return new Pair<>(0, 0);
+        int[] w = new int[1];
+        int[] h = new int[1];
+
+        NanoVG.nvgImageSize(vg, nvgImage.nvg, w, h);
+
+        return new Pair<>(w[0], h[0]);
     }
 
     private int loadImage(Image image) {

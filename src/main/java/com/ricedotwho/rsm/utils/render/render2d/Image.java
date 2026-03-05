@@ -30,6 +30,7 @@ package com.ricedotwho.rsm.utils.render.render2d;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.ricedotwho.rsm.data.Pair;
 import lombok.Getter;
 import org.lwjgl.system.MemoryUtil;
 
@@ -47,6 +48,7 @@ public class Image {
     private final InputStream inputStream;
     private ByteBuffer buffer = null;
     private final int flags;
+    private Pair<Integer, Integer> dims = new Pair<>(0, 0);
 
     public Image(String identifier) {
         this(identifier, 0);
@@ -72,10 +74,21 @@ public class Image {
         }
     }
 
+    public Image(String identifier, InputStream stream) {
+        this.identifier = identifier;
+        this.flags = 0;
+        this.isSVG = identifier.endsWith(".svg");
+        this.inputStream = stream;
+    }
+
     public Image() {
         this.flags = 0;
         this.isSVG = false;
         this.inputStream = null;
+    }
+
+    public void loadDims() {
+        this.dims = NVGUtils.getImageSize(this);
     }
 
     public ByteBuffer buffer() {
@@ -88,6 +101,10 @@ public class Image {
             }
         }
         return buffer;
+    }
+
+    public void delete() {
+        NVGUtils.deleteImageFully(this);
     }
 
     @Override
