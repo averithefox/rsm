@@ -56,7 +56,7 @@ public class Location extends ModComponent {
         joinSent = false;
     }
 
-    public boolean isHypixel() {
+    public static boolean isHypixel() {
         return isHypixel || RSM.getModule(ClickGUI.class).getForceSkyBlock().getValue();
     }
 

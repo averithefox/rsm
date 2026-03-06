@@ -74,7 +74,7 @@ public class DevCommand extends Command {
                         }))
                 .then(literal("whereami")
                         .executes(ctx -> {
-                            ChatUtils.chat("Location: " + Location.getArea().getName() + ". Dungeon Floor: " + Location.getFloor().getName() + ". Kuudra Tier: " + Location.getKuudraTier() + ".");
+                            ChatUtils.chat("Hypixel: " + Location.isHypixel() + " Skyblock: " + Location.isInSkyblock() + " Location: " + Location.getArea().getName() + ". Dungeon Floor: " + Location.getFloor().getName() + ". Kuudra Tier: " + Location.getKuudraTier() + ".");
                             return 1;
                         }))
                 .then(literal("room")
