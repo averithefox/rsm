@@ -56,6 +56,16 @@ public class Pos {
         return this.z;
     }
 
+    public void x(double x) {
+        this.x = x;
+    }
+    public void y(double y) {
+        this.y = y;
+    }
+    public void z(double z) {
+        this.z = z;
+    }
+
     public Pos copy() {
         return new Pos(this);
     }

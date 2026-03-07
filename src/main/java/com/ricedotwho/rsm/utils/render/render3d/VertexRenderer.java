@@ -31,8 +31,6 @@ public final class VertexRenderer {
         return CACHE.computeIfAbsent(slices, CircleData::new);
     }
 
-
-
     public void renderLine(PoseStack.Pose pose, VertexConsumer buffer, Vec3 start, Vec3 direction, Colour startColor, Colour endColor) {
         float endX = (float) (start.x() + direction.x());
         float endY = (float) (start.y() + direction.y());

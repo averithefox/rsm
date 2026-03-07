@@ -21,6 +21,7 @@ public class Renderer3D extends ModComponent {
 
     private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> lineMap = new HashMap<>();
     private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> filledMap = new HashMap<>();
+    private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> textureMap = new HashMap<>();
 
     public Renderer3D() {
         super("Renderer3D");

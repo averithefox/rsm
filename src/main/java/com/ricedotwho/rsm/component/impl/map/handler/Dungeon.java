@@ -6,6 +6,7 @@ import com.ricedotwho.rsm.component.impl.location.Island;
 import com.ricedotwho.rsm.component.impl.location.Location;
 import com.ricedotwho.rsm.data.DungeonClass;
 import com.ricedotwho.rsm.data.DungeonPlayer;
+import com.ricedotwho.rsm.data.Phase7;
 import com.ricedotwho.rsm.event.api.SubscribeEvent;
 import com.ricedotwho.rsm.event.impl.client.PacketEvent;
 import com.ricedotwho.rsm.event.impl.client.TimeEvent;
@@ -15,6 +16,7 @@ import com.ricedotwho.rsm.event.impl.game.DungeonEvent;
 import com.ricedotwho.rsm.event.impl.world.WorldEvent;
 import com.ricedotwho.rsm.module.impl.render.ClickGUI;
 import com.ricedotwho.rsm.utils.ChatUtils;
+import com.ricedotwho.rsm.utils.DungeonUtils;
 import com.ricedotwho.rsm.utils.NumberUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -247,5 +249,10 @@ public class Dungeon extends ModComponent {
         DungeonPlayer player = getMyPlayer();
         if(player == null || player.getDClass() == null) return false;
         return player.getDClass().equals(clazz);
+    }
+
+    public static int getPlayersLeapt() {
+        Phase7 phase = DungeonUtils.getP3Section();
+        return Math.toIntExact(players.stream().filter(p -> p.getPlayer() != null && p.getPlayer() != mc.player && DungeonUtils.getP3Section(p.getPlayer().position()) == phase).count());
     }
 }

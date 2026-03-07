@@ -163,14 +163,14 @@ public class ConfigUtils {
 
                             setting.register();
                         } catch (Exception e) {
-                            e.printStackTrace();
                             ChatUtils.chat("Skipped malformed setting. (%s)", settingElement);
+                            RSM.getLogger().error("Failed to load setting: {}", settingElement, e);
                             modified = true;
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                     ChatUtils.chat("Skipped malformed group setting. (%s)", groupElement);
+                    RSM.getLogger().error("Failed to load grounp setting: {}", groupElement, e);
                     modified = true;
                 }
             }
