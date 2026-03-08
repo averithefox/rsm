@@ -32,14 +32,18 @@ public final class VertexRenderer {
     }
 
     public void renderLine(PoseStack.Pose pose, VertexConsumer buffer, Vec3 start, Vec3 direction, Colour startColor, Colour endColor) {
+        renderLine(pose, buffer, start, direction, startColor.getRGB(), endColor.getRGB());
+    }
+
+    public void renderLine(PoseStack.Pose pose, VertexConsumer buffer, Vec3 start, Vec3 direction, int startColor, int endColor) {
         float endX = (float) (start.x() + direction.x());
         float endY = (float) (start.y() + direction.y());
         float endZ = (float) (start.z() + direction.z());
         float nx = (float) direction.x();
         float ny = (float) direction.y();
         float nz = (float) direction.z();
-        buffer.addVertex(pose, (float) start.x(), (float) start.y(), (float) start.z()).setColor(startColor.getRGB()).setNormal(pose, nx, ny, nz);
-        buffer.addVertex(pose, endX, endY, endZ).setColor(endColor.getRGB()).setNormal(pose, nx, ny, nz);
+        buffer.addVertex(pose, (float) start.x(), (float) start.y(), (float) start.z()).setColor(startColor).setNormal(pose, nx, ny, nz);
+        buffer.addVertex(pose, endX, endY, endZ).setColor(endColor).setNormal(pose, nx, ny, nz);
     }
 
     public void renderOutlineBox(PoseStack.Pose pose, VertexConsumer buffer, AABB aabb, Colour colour) {

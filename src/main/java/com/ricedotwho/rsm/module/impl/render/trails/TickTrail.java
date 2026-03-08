@@ -14,6 +14,7 @@ public record TickTrail(Trail config) {
     private static final List<Vec3> TRAIL_LIST = new ArrayList<>();
 
     public void onTick() {
+        if (!TRAIL_LIST.isEmpty() && TRAIL_LIST.getLast().equals(config.playerPos())) return;
         if (TRAIL_LIST.size() >= config.getTrailLength().getValue().intValue()) TRAIL_LIST.removeLast();
         TRAIL_LIST.addFirst(config.playerPos());
     }
@@ -23,5 +24,9 @@ public record TickTrail(Trail config) {
         for (Vec3 trailPos : TRAIL_LIST) {
             Renderer3D.addTask(new Circle(trailPos, config.getDepth().getValue(), trailWidthFloat, config.getColour().getValue(), 12));
         }
+    }
+
+    public void reset() {
+        TRAIL_LIST.clear();
     }
 }

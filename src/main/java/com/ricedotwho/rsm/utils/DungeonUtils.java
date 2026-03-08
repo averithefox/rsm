@@ -38,6 +38,7 @@ public class DungeonUtils implements Accessor {
     );
     
     public Phase7 getF7Phase() {
+        if (mc.player == null) return UNKNOWN;
         double posY = mc.player.position().y();
         if (posY > 210) return P1;
         if (posY > 155) return P2;
@@ -52,6 +53,7 @@ public class DungeonUtils implements Accessor {
     }
     
     public Phase7 getP3Section() {
+        if (mc.player == null) return UNKNOWN;
         return getP3Section(mc.player.position());
     }
     

@@ -440,6 +440,36 @@ public final class Colour implements Serializable, Cloneable, Comparable<Colour>
         return new Colour(hsba[0], hsba[1], (float) hsba[2], alpha);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
+    public static Colour lerp(Colour a, Colour b, float t) {
+        return new Colour(
+                (int) (a.getRed() + (b.getRed() - a.getRed()) * t),
+                (int) (a.getGreen() + (b.getGreen() - a.getGreen()) * t),
+                (int) (a.getBlue() + (b.getBlue() - a.getBlue()) * t),
+                (int) (a.getAlpha() + (b.getAlpha() - a.getAlpha()) * t)
+        );
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    public static int lerpARGB(int a, int b, float t) {
+        int a0 = (a >>> 24) & 0xFF;
+        int r0 = (a >>> 16) & 0xFF;
+        int g0 = (a >>> 8) & 0xFF;
+        int b0 =  a & 0xFF;
+
+        int a1 = (b >>> 24) & 0xFF;
+        int r1 = (b >>> 16) & 0xFF;
+        int g1 = (b >>> 8) & 0xFF;
+        int b1 =  b & 0xFF;
+
+        int r = (int)(r0 + (r1 - r0) * t);
+        int g = (int)(g0 + (g1 - g0) * t);
+        int bC = (int)(b0 + (b1 - b0) * t);
+        int aC = (int)(a0 + (a1 - a0) * t);
+
+        return (aC << 24) | (r << 16) | (g << 8) | bC;
+    }
+
     /**
      * Return a "safe" copy of this Colour. The precise meaning of this is that the returned Colour will not be affected by any changes made to this Colour.
      */

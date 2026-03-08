@@ -63,9 +63,6 @@ public class Map extends ModComponent {
 
     private void updateCurrentRoom() {
         currentRoom = ScanUtils.getRoomFromPos((int) mc.player.position().x(), (int) mc.player.position().z());
-        if (currentRoom == null) {
-
-        }
     }
 
     @SubscribeEvent

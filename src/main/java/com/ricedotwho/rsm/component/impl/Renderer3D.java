@@ -36,6 +36,7 @@ public class Renderer3D extends ModComponent {
         registerLine(FilledOutlineBox.class);
         registerLine(Line.class);
         registerLine(OutlineBox.class);
+        registerLine(LineList.class);
     }
 
     @SuppressWarnings("unchecked")
