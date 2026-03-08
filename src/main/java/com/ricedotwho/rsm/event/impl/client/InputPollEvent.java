@@ -1,5 +1,6 @@
 package com.ricedotwho.rsm.event.impl.client;
 
+import com.ricedotwho.rsm.data.MutableInput;
 import com.ricedotwho.rsm.event.Event;
 import lombok.Getter;
 import net.minecraft.world.entity.player.Input;
@@ -10,11 +11,11 @@ public class InputPollEvent extends Event {
     @Getter
     private final Input clientInput;
     @Getter
-    private final Consumer<Input> inputConsumer;
+    private final MutableInput input;
 
-    public InputPollEvent(Input clientInput, Consumer<Input> inputConsumer) {
+    public InputPollEvent(Input clientInput, MutableInput input) {
         this.clientInput = clientInput;
-        this.inputConsumer = inputConsumer;
+        this.input = input;
     }
 
 }

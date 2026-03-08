@@ -2,6 +2,7 @@ package com.ricedotwho.rsm.mixins;
 
 import com.ricedotwho.rsm.component.impl.camera.CameraHandler;
 import com.ricedotwho.rsm.component.impl.camera.ClientRotationHandler;
+import com.ricedotwho.rsm.data.MutableInput;
 import com.ricedotwho.rsm.event.impl.client.InputPollEvent;
 import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.world.entity.player.Input;
@@ -18,6 +19,8 @@ public class MixinKeyboardInput {
         // Don't forget to set it if you remove the onPrePollInputs
         // instance.keyPresses is null here
         instance.keyPresses = ClientRotationHandler.adjustInputsForRotation(CameraHandler.onPrePollInputs(value));
-        new InputPollEvent(instance.keyPresses, input -> instance.keyPresses = input).post();
+        InputPollEvent e = new InputPollEvent(instance.keyPresses, new MutableInput(instance.keyPresses));
+        e.post();
+        instance.keyPresses = e.getInput().toInput();
     }
 }
