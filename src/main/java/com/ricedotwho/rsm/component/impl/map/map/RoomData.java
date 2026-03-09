@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public record RoomData(String name, RoomType type, String shape, List<Integer> cores, int crypts, int secrets, int trappedChests) {
+public record RoomData(String name, RoomType type, RoomShape shape, List<Integer> cores, int crypts, int secrets, int trappedChests) {
 
     @Override
     public @NotNull String toString() {
@@ -22,6 +22,6 @@ public record RoomData(String name, RoomType type, String shape, List<Integer> c
     }
 
     public static RoomData createUnknown(RoomType type) {
-        return new RoomData("Unknown", type, "?", Collections.emptyList(), 0, 0, 0);
+        return new RoomData("Unknown", type, RoomShape.UNKNOWN, Collections.emptyList(), 0, 0, 0);
     }
 }

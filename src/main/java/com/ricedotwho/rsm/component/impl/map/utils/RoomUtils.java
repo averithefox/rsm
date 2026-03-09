@@ -10,6 +10,7 @@ import com.ricedotwho.rsm.component.impl.task.TaskComponent;
 import com.ricedotwho.rsm.data.Pos;
 import com.ricedotwho.rsm.data.Rotation;
 import com.ricedotwho.rsm.utils.Accessor;
+import com.ricedotwho.rsm.utils.ChatUtils;
 import com.ricedotwho.rsm.utils.RotationUtils;
 import lombok.experimental.UtilityClass;
 import net.minecraft.core.BlockPos;
@@ -115,8 +116,21 @@ public class RoomUtils implements Accessor {
             return;
         }
 
-        for(Room c : uniqueRoom.getTiles()) { // each tile in the room
+        for (Room c : uniqueRoom.getTiles()) { // each tile in the room
             if (c.isSeparator()) continue;
+
+            int size = uniqueRoom.realSize();
+
+            int required = switch (c.getData().shape()) {
+                case S4x1 -> 4;
+                case S3x1 -> 3;
+                default -> 0;
+            };
+
+            ChatUtils.chat("Room: %s, Shape %s, size: %s, required: %s", uniqueRoom.getName(), c.getData().shape(), size, required);
+
+            if (required > 0 && uniqueRoom.realSize() != required) continue;
+
             for (int i = 0; i < offsets.length; i++) { // offset to get each corner of the rooms
                 BlockPos nPos = new BlockPos(c.getX() + offsets[i][0], c.getRoofHeight(), c.getZ() + offsets[i][1]);
 
@@ -131,7 +145,7 @@ public class RoomUtils implements Accessor {
 
                 //if (uniqueRoom.getRotation() != null && uniqueRoom.getRotation().equals(UNKNOWN)) RSM.getLogger().info("Center x: {} z: {}. Scanning offset for room {}. Block is: {} at {}. Corner: {}", c.getX(), c.getZ(), c.getData().name(), mc.level.getBlockState(nPos).getBlock().getName().getString(), new Pos(nPos).toChatString(), isCorner(nPos));
 
-                if (mc.level.getBlockState(nPos).getBlock().equals(Blocks.BLUE_TERRACOTTA) && idk(nPos)) {
+                if (mc.level.getBlockState(nPos).getBlock().equals(Blocks.BLUE_TERRACOTTA) && isCorner(nPos)) { // rarely rooms have no gap ??
                     RoomRotation rot = getRotationByNumber(i);
                     uniqueRoom.setRotation(rot);
                     uniqueRoom.setMainRoom(c);

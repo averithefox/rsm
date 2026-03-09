@@ -80,6 +80,14 @@ public class UniqueRoom {
         }
     }
 
+    public int realSize() {
+        int c = 0;
+        for (Room t : tiles) {
+            if (!t.isSeparator()) c++;
+        }
+        return c;
+    }
+
     public void addTile(int x, int z, Room tile) {
         if (tiles.stream().anyMatch(t -> t.getX() == tile.getX() && t.getZ() == tile.getZ())) return;
         tiles.add(tile);
