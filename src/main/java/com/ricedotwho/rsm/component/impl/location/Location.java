@@ -163,6 +163,16 @@ public class Location extends ModComponent {
         }
     }
 
+    // thanks proxy mods for breaking the ip check
+    @SubscribeEvent
+    public void onTablistHeader(PacketEvent.Receive event) {
+        if (!(event.getPacket() instanceof ClientboundTabListPacket packet)) return;
+        String header = ChatFormatting.stripFormatting(packet.header().getString());
+        if (header.equals("You are playing on MC.HYPIXEL.NET")) {
+            isHypixel = true;
+        }
+    }
+
     @SubscribeEvent
     public void onLocation(LocationEvent.Changed event) {
         if (event.getNewIsland().is(Island.Dungeon)) {
