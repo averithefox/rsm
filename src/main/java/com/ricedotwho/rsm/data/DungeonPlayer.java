@@ -26,7 +26,7 @@ public class DungeonPlayer implements Accessor {
         this.dClass = dClass;
         this.player = player;
         this.name = player.getName().getString();
-        this.uuid = player.getUUID();
+        this.uuid = player.getGameProfile().id();
         this.level = level;
         this.secrets = secrets;
     }

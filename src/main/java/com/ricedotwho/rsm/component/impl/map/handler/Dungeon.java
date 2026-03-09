@@ -253,6 +253,11 @@ public class Dungeon extends ModComponent {
 
     public static int getPlayersLeapt() {
         Phase7 phase = DungeonUtils.getP3Section();
-        return Math.toIntExact(players.stream().filter(p -> p.getPlayer() != null && p.getPlayer() != mc.player && DungeonUtils.getP3Section(p.getPlayer().position()) == phase).count());
+        return Math.toIntExact(players.stream().filter(p -> {
+            if (p.getPlayer() == null) {
+                if (p.findPlayer() == null) return false;
+            }
+            return DungeonUtils.getP3Section(p.getPlayer().position()) == phase;
+        }).count());
     }
 }
