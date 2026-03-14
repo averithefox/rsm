@@ -1,12 +1,11 @@
 package com.ricedotwho.rsm.command.fabric;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.ricedotwho.rsm.RSM;
 import lombok.experimental.UtilityClass;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Map;
 public class FabricCommands {
     private final Map<String, String> shortenings = new HashMap<>();
     static {
-        shortenings.put("f0", "joindungeon catacombs_entrance");
+        shortenings.put("e", "joindungeon catacombs_entrance");
         shortenings.put("f1", "joindungeon catacombs 1");
         shortenings.put("f2", "joindungeon catacombs 2");
         shortenings.put("f3", "joindungeon catacombs 3");
@@ -38,6 +37,7 @@ public class FabricCommands {
         shortenings.put("t4", "joindungeon kuudra_fiery");
         shortenings.put("t5", "joindungeon kuudra_infernal");
 
+        // these get overridden by noammaddons, if its not working enable warp shortcuts in noammaddons
         shortenings.put("dh", "warp dungeon_hub");
         shortenings.put("dn", "warp dungeon_hub");
         shortenings.put("d", "warp dungeon_hub");

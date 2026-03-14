@@ -18,7 +18,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 
 @Getter
-@ModuleInfo(aliases = {"Click GUI", "menu", "gui"}, id = "ClickGUI", category = Category.RENDER, defaultKey = GLFW.GLFW_KEY_RIGHT, alwaysDisabled = true, hasKeybind = true)
+@ModuleInfo(aliases = {"Click GUI", "menu", "gui"}, id = "ClickGUI", category = Category.RENDER, defaultKey = GLFW.GLFW_KEY_RIGHT_ALT, alwaysDisabled = true, hasKeybind = true)
 public class ClickGUI extends Module {
     private final StringSetting commandPrefix = new StringSetting("Command Prefix", "`", null, false, false, 1);
     private final ModeSetting toggleClickType = new ModeSetting("Toggle Type", "Left", List.of("Left", "Right"));
