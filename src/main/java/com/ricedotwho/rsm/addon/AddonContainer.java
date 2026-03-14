@@ -36,7 +36,7 @@ public class AddonContainer {
         if (RSM.getInstance().getConfigGui() != null && reload) RSM.getInstance().getConfigGui().reloadModules();
         RSM.getInstance().getCommandManager().put(this.commands);
         RSM.getInstance().getComponentManager().put(this.components);
-        //this.addon.onInitialize();
+        if (hasMixin) this.addon.onInitialize();
     }
 
     public void unLoad() {

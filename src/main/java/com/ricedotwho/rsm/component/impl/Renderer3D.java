@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Renderer3D extends ModComponent {
     private static Renderer3D instance;
@@ -21,7 +20,6 @@ public class Renderer3D extends ModComponent {
 
     private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> lineMap = new HashMap<>();
     private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> filledMap = new HashMap<>();
-    private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> textureMap = new HashMap<>();
 
     public Renderer3D() {
         super("Renderer3D");
