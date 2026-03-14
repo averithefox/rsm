@@ -1,0 +1,35 @@
+package com.ricedotwho.rsm.module.impl.player.keyshortcuts;
+
+import com.google.common.reflect.TypeToken;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
+import com.ricedotwho.rsm.module.Module;
+import com.ricedotwho.rsm.module.api.Category;
+import com.ricedotwho.rsm.module.api.ModuleInfo;
+import com.ricedotwho.rsm.ui.clickgui.settings.impl.SaveSetting;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@ModuleInfo(aliases = "Key Shortcuts", id = "KeyShortcuts", category = Category.PLAYER, alwaysDisabled = true)
+public class KeyShortcuts extends Module {
+    @Getter
+    private static final SaveSetting<List<Shortcut>> data = new SaveSetting<>("Shortcuts", "player", "key_shortcuts.json", ArrayList::new,
+            new TypeToken<List<Shortcut>>() {}.getType(),
+            new GsonBuilder()
+                    .registerTypeHierarchyAdapter(Shortcut.class, (JsonDeserializer<Shortcut>) (json, typeOfT, context) -> new Shortcut(json.getAsJsonObject()))
+                    .registerTypeHierarchyAdapter(Shortcut.class, (JsonSerializer<Shortcut>) (src, typeOfT, context) -> src.serialize())
+                    .setPrettyPrinting().create(),
+            true, null, null);
+
+    public KeyShortcuts() {
+        this.registerProperty(data);
+    }
+
+    public static void save() {
+        data.save();
+    }
+}

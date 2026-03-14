@@ -26,12 +26,14 @@ import com.ricedotwho.rsm.module.impl.dungeon.puzzle.Puzzles;
 import com.ricedotwho.rsm.module.impl.movement.Ether;
 import com.ricedotwho.rsm.module.impl.movement.NullBinds;
 import com.ricedotwho.rsm.module.impl.player.ChestHitFix;
+import com.ricedotwho.rsm.module.impl.player.keyshortcuts.KeyShortcuts;
 import com.ricedotwho.rsm.module.impl.render.*;
 import com.ricedotwho.rsm.module.impl.render.hud.Hud;
 import com.ricedotwho.rsm.module.impl.render.ImageHud;
 import com.ricedotwho.rsm.module.impl.render.visualwords.VisualWords;
 import com.ricedotwho.rsm.ui.clickgui.RSMConfig;
 import com.ricedotwho.rsm.ui.clickgui.RSMGuiEditor;
+import com.ricedotwho.rsm.ui.keyshortcuts.KeyShortcutGui;
 import com.ricedotwho.rsm.ui.launch.Launch;
 import com.ricedotwho.rsm.utils.CustomSounds;
 import com.ricedotwho.rsm.utils.EtherUtils;
@@ -47,6 +49,7 @@ import net.minecraft.network.chat.MutableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.annotation.Retention;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,6 +80,10 @@ public class RSM implements ClientModInitializer {
     @Getter
     @Setter
     private AddonLoader addonLoader;
+    @Setter
+    @Getter
+    private KeyShortcutGui shortcutGui;
+
     @Getter
     private static final MutableComponent prefix = Component.empty()
             .append(Component.literal("[").withStyle(ChatFormatting.DARK_GRAY))
@@ -102,6 +109,7 @@ public class RSM implements ClientModInitializer {
             VisualWords.class,
             Hud.class,
             ImageHud.class
+            //KeyShortcuts.class
     );
 
     private final List<Class<? extends Command>> COMMANDS = Arrays.asList(
@@ -113,6 +121,7 @@ public class RSM implements ClientModInitializer {
             DevCommand.class,
             VisualWordCommand.class,
             ImageHudCommand.class
+            //KeyShortcutCommand.class
     );
 
     private final List<Class<? extends ModComponent>> COMPONENTS = Arrays.asList(
@@ -165,5 +174,9 @@ public class RSM implements ClientModInitializer {
         if (instance == null || instance.getModuleManager() == null) return null;
         ModComponent c = instance.getComponentManager().get(component);
         return component.cast(c);
+    }
+
+    public static String getName() {
+        return "RSM";
     }
 }
