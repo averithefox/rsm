@@ -16,18 +16,15 @@ import com.ricedotwho.rsm.module.api.Category;
 import com.ricedotwho.rsm.module.api.ModuleInfo;
 import com.ricedotwho.rsm.module.impl.render.hud.Hud;
 import com.ricedotwho.rsm.ui.clickgui.settings.impl.*;
-import com.ricedotwho.rsm.utils.CustomSounds;
 import com.ricedotwho.rsm.utils.DungeonUtils;
 import com.ricedotwho.rsm.utils.Utils;
 import com.ricedotwho.rsm.utils.render.render3d.type.FilledOutlineBox;
 import lombok.Getter;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.AABB;
-import org.joml.Vector2d;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +34,7 @@ import java.util.regex.Pattern;
 @Getter
 @ModuleInfo(aliases = "P3 Qol", id = "P3Qol", category = Category.DUNGEONS)
 public class P3Qol extends Module {
-    private static final Pattern term = Pattern.compile("^(.*?) (?:activated|completed) a (terminal|device|lever)! \\((\\d+)/(\\d+)\\)");
+    public static final Pattern TERM = Pattern.compile("^(.*?) (?:activated|completed) a (terminal|device|lever)! \\((\\d+)/(\\d+)\\)");
 
     private final BooleanSetting deviceDone = new BooleanSetting("Device Title", false);
     private final ColourSetting deviceDoneColour = new ColourSetting("Device Colour", Colour.GREEN);
@@ -72,7 +69,7 @@ public class P3Qol extends Module {
     public void onChat(ChatEvent.Chat event) {
         if (!Location.getArea().is(Island.Dungeon) || !DungeonUtils.isPhase(Phase7.P3) || mc.player == null) return;
         String text = ChatFormatting.stripFormatting(event.getMessage().getString());
-        Matcher matcher = term.matcher(text);
+        Matcher matcher = TERM.matcher(text);
         if (!matcher.find()) return;
         String name = matcher.group(1);
         String type = matcher.group(2);

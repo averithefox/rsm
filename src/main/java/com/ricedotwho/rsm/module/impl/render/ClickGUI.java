@@ -54,6 +54,8 @@ public class ClickGUI extends Module {
     private final BooleanSetting devInfo = new BooleanSetting("Info", false);
     private final BooleanSetting forceHypixel = new BooleanSetting("Force Hypixel", false);
     private final BooleanSetting forceSkyBlock = new BooleanSetting("Force SkyBlock", false);
+    @Getter
+    private static final BooleanSetting logErrors = new BooleanSetting("Send listener errors in chat", false);
 
     private final ButtonSetting editGui = new ButtonSetting("Edit Gui" , "Edit", () -> {
         assert mc.player != null;
@@ -71,7 +73,7 @@ public class ClickGUI extends Module {
                 theme,
                 devGroup
         );
-        devGroup.add(forceDev, truePlayerModifier, devOverride, devInfo, forceHypixel, forceSkyBlock);
+        devGroup.add(forceDev, truePlayerModifier, devOverride, devInfo, forceHypixel, forceSkyBlock, logErrors);
         theme.add(background, selectedBackground, line, name1, name2, name3, highlight, pipe, panel, panelLines, text, unselectedText, selectedText, selected, groupFill, groupOutline, scrollBar, enabledColour, enabledText);
     }
 

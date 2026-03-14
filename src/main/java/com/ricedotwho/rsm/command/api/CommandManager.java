@@ -85,7 +85,7 @@ public class CommandManager extends Manager<Command> implements Accessor {
             Component msg = ComponentUtils.fromMessage(e.getRawMessage());
             ChatUtils.chat(msg);
         } catch (Exception e) {
-            e.printStackTrace();
+            RSM.getLogger().error("Error while running command {}", message, e);
             ChatUtils.chat(ChatFormatting.RED + "Something went wrong running that command!");
         }
     }

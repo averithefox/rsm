@@ -12,6 +12,7 @@ import com.ricedotwho.rsm.utils.ChatUtils;
 import com.ricedotwho.rsm.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class UniqueRoom {
     private final List<Door> doors = new ArrayList<>();
     @Setter
     @Getter
-    private RoomRotation rotation;
+    private @NotNull RoomRotation rotation = RoomRotation.UNKNOWN;
     @Getter
     private final DataStore data = new DataStore();
 
@@ -151,7 +152,7 @@ public class UniqueRoom {
     }
 
     public void update() {
-        if (!Utils.equalsOneOf(this.rotation, RoomRotation.UNKNOWN, null)) return;
+        if (this.rotation != RoomRotation.UNKNOWN) return;
         RoomUtils.findMainAndRotation(this);
     }
 
