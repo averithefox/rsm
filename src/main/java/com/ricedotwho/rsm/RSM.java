@@ -136,7 +136,8 @@ public class RSM implements ClientModInitializer {
             CameraHandler.class,
             ClientRotationHandler.class,
             SbStatTracker.class,
-            Terminals.class
+            Terminals.class,
+            Ping.class
     );
 
     @Override

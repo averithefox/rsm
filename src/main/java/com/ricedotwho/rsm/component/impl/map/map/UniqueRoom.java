@@ -98,7 +98,7 @@ public class UniqueRoom {
         if (tiles.stream().anyMatch(t -> t.getX() == tile.getX() && t.getZ() == tile.getZ())) return;
         tiles.add(tile);
         if (tile.getData().type() != this.type) {
-            this.type = tile.getUniqueRoom().getType(); // ???
+            this.type = tile.getData().type(); // ???
         }
         tile.setUniqueRoom(this);
         RoomUtils.findMainAndRotation(this);

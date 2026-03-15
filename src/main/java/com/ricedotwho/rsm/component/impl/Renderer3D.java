@@ -7,16 +7,22 @@ import com.ricedotwho.rsm.event.api.SubscribeEvent;
 import com.ricedotwho.rsm.event.impl.render.Render3DEvent;
 import com.ricedotwho.rsm.utils.render.render3d.Render3DLayer;
 import com.ricedotwho.rsm.utils.render.render3d.type.*;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldExtractionContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 import java.util.*;
 
 public class Renderer3D extends ModComponent {
     private static Renderer3D instance;
     private final List<Beacon> beacons = new ArrayList<>();
+    private final List<Text> texts = new ArrayList<>();
 
     private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> lineMap = new HashMap<>();
     private final Map<Class<? extends RenderTask>, TaskList<? extends RenderTask>> filledMap = new HashMap<>();
@@ -81,6 +87,7 @@ public class Renderer3D extends ModComponent {
         stack.popPose();
 
         this.renderBatchedBeaconBeams(stack, camera);
+        this.renderBatchedText(source, stack, camera);
 
         this.clear();
     }
@@ -89,6 +96,7 @@ public class Renderer3D extends ModComponent {
         lineMap.forEach((k, e) -> e.clear());
         filledMap.forEach((k, e) -> e.clear());
         beacons.clear();
+        texts.clear();
     }
 
     private void renderBatchedLines(MultiBufferSource.BufferSource source, PoseStack stack) {
@@ -135,6 +143,27 @@ public class Renderer3D extends ModComponent {
         }
     }
 
+    private void renderBatchedText(MultiBufferSource.BufferSource source, PoseStack stack, Vec3 camera) {
+        Vec3 cameraPos = camera.scale(-1);
+        for (Text task : texts) {
+            stack.pushPose();
+            Matrix4f pose = stack.last().pose();
+            float scale = task.getScale() * 0.025f;
+            pose.translate(task.getPos().toVector3f())
+                    .translate(cameraPos.toVector3f())
+                    .rotate(task.getRotation())
+                    .scale(scale, -scale, scale);
+
+            task.getFont().drawInBatch(task.getContent(), task.getWidth() / 2f, 0, -1, true, pose, source,
+                    task.isDepth() ? Font.DisplayMode.POLYGON_OFFSET : Font.DisplayMode.SEE_THROUGH,
+                    0,
+                    LightTexture.FULL_BRIGHT
+                    );
+
+            stack.popPose();
+        }
+    }
+
     private void renderBatchedBeaconBeams(PoseStack stack, Vec3 camera) {
         for (Beacon task : this.beacons) {
             task.renderBeacon(stack, camera);
@@ -155,6 +184,10 @@ public class Renderer3D extends ModComponent {
             }
             case BEACON -> {
                 instance.beacons.add((Beacon) task);
+                return;
+            }
+            case TEXT -> {
+                instance.texts.add((Text) task);
                 return;
             }
             default -> {
