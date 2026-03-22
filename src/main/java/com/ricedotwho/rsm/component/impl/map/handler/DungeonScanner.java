@@ -43,7 +43,7 @@ public class DungeonScanner implements Accessor {
     }
 
     public boolean shouldScan() {
-        return !isScanning && !hasScanned && System.currentTimeMillis() - lastScanTime >= 250 && Location.getFloor() != Floor.None;
+        return !isScanning && !hasScanned && System.currentTimeMillis() - lastScanTime >= 250 && Location.getFloor() != Floor.None && Dungeon.isStarted();
     }
 
     public void scan() {
@@ -77,7 +77,7 @@ public class DungeonScanner implements Accessor {
             }
         }
 
-        if (allChunksLoaded && DungeonInfo.getUniqueRooms().stream().noneMatch(r  -> r.getRotation().equals(RoomRotation.UNKNOWN))) {
+        if (Dungeon.isStarted() && allChunksLoaded && DungeonInfo.getUniqueRooms().stream().noneMatch(r  -> r.getRotation().equals(RoomRotation.UNKNOWN))) {
             DungeonInfo.setRoomCount(((int) Arrays.stream(DungeonInfo.getDungeonList()).filter(tile -> tile instanceof Room && !((Room) tile).isSeparator()).count()));;
             hasScanned = true;
             new DungeonEvent.ScanComplete().post();
