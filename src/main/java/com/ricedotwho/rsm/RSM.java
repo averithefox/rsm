@@ -123,7 +123,8 @@ public class RSM implements ClientModInitializer {
             VisualWordCommand.class,
             ImageHudCommand.class,
             KeyShortcutCommand.class,
-            PosMsgCommand.class
+            PosMsgCommand.class,
+            ToggleCommand.class
     );
 
     private final List<Class<? extends ModComponent>> COMPONENTS = Arrays.asList(
