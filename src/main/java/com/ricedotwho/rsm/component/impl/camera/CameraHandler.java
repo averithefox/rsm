@@ -51,6 +51,7 @@ public class CameraHandler extends ModComponent {
         if (providers.isEmpty()) return;
         if (providers.stream().anyMatch(CameraProvider::shouldBlockKeyboardMovement)) flags |= BLOCK_KEYS_FLAG;
         if (providers.stream().anyMatch(CameraProvider::shouldBlockMouseMovement)) flags |= BLOCK_MOUSE_FLAG;
+
         // This allows for getPriority adjust dynamically, it could be sorted when adding them if the priorities are constant
         // I don't foresee this being an issue as they will rarely contain more than provider at a time
         List<CameraProvider> sortedProviders = providers.stream().sorted(Comparator.comparingInt(CameraProvider::getPriority)).toList();
