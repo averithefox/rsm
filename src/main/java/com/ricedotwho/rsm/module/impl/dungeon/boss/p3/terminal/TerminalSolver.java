@@ -53,6 +53,7 @@ public class TerminalSolver extends Module {
     @Getter private static final NumberSetting forcedFirstClick = new NumberSetting("Forced Firstclick", 0, 500, 400, 10);
 
     @Getter private static final BooleanSetting terminalTime = new BooleanSetting("Send terminal time", false);
+    @Getter private static final MultiBoolSetting stats = new MultiBoolSetting("Chat Stats", List.of("Personal Best", "Average Click", "First Click", "CPS"), List.of("Personal Best"), terminalTime::getValue);
 
     @Getter private static final NumberSetting gap = new NumberSetting("Gap", 0, 5, 2, 0.1);
 
@@ -115,6 +116,7 @@ public class TerminalSolver extends Module {
                 melodyEdges,
                 forcedFirstClick,
                 terminalTime,
+                stats,
                 gap,
                 terminalColours,
                 personalBests

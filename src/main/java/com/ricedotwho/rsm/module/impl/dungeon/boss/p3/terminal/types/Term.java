@@ -29,7 +29,6 @@ public abstract class Term implements Accessor {
     protected boolean clicked = false;
     private final String guiTitle;
     protected TermSol lastClick = null;
-    protected boolean first = true;
 
     public Term(String title) {
         packetItems.clear();
