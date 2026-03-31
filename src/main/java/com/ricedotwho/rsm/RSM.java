@@ -31,6 +31,7 @@ import com.ricedotwho.rsm.module.impl.player.keyshortcuts.KeyShortcuts;
 import com.ricedotwho.rsm.module.impl.render.*;
 import com.ricedotwho.rsm.module.impl.render.hud.Hud;
 import com.ricedotwho.rsm.module.impl.render.ImageHud;
+import com.ricedotwho.rsm.module.impl.render.opsec.OpSec;
 import com.ricedotwho.rsm.module.impl.render.visualwords.VisualWords;
 import com.ricedotwho.rsm.ui.clickgui.RSMConfig;
 import com.ricedotwho.rsm.ui.clickgui.RSMGuiEditor;
@@ -107,6 +108,7 @@ public class RSM implements ClientModInitializer {
             ChestHitFix.class,
             P3Qol.class,
             VisualWords.class,
+            OpSec.class,
             Hud.class,
             ImageHud.class,
             KeyShortcuts.class,
