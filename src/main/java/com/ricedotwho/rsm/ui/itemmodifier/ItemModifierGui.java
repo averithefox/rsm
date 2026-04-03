@@ -202,7 +202,7 @@ public class ItemModifierGui extends Screen implements Accessor {
 
             float relY = (float) (mouseY - y);
             float relX = (float) (mouseX - x);
-            if (row.click(relX, relY, button)) {
+            if (row.click(relX, relY, button)) { // ?
                 rows.remove(i);
                 break;
             }

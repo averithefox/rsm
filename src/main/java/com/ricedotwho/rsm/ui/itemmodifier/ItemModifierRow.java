@@ -30,9 +30,7 @@ public class ItemModifierRow {
     private static final float DELETE_WIDTH = 67f;
 
     private static ItemModifierRow expandedInstance = null;
-
     private static ItemModifierRow selected = null;
-
     private static ItemModifierRow focusedComponent = null;
 
     @Getter
@@ -139,7 +137,7 @@ public class ItemModifierRow {
                     expandedInstance = null;
                 }
                 writing = false;
-                return true;
+                return false;
             }
         }
 
@@ -252,7 +250,7 @@ public class ItemModifierRow {
 
             if (expanded) {
                 // ar ar ar fredy faze bear
-                //renderStupidFuckingColourThing(mouseX, mouseY, colourX + COLOUR_WIDTH / 2, y + BOX_HEIGHT / 2);
+                renderStupidFuckingColourThing(mouseX, mouseY, colourX + COLOUR_WIDTH / 2, y + BOX_HEIGHT / 2);
             }
         }
     }
