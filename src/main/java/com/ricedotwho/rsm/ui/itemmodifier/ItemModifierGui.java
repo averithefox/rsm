@@ -8,6 +8,7 @@ import com.ricedotwho.rsm.module.impl.render.ClickGUI;
 import com.ricedotwho.rsm.ui.clickgui.RSMConfig;
 import com.ricedotwho.rsm.ui.clickgui.api.FatalityColours;
 import com.ricedotwho.rsm.ui.clickgui.api.Mask;
+import com.ricedotwho.rsm.ui.clickgui.impl.module.settings.ValueComponent;
 import com.ricedotwho.rsm.utils.Accessor;
 import com.ricedotwho.rsm.utils.ChatUtils;
 import com.ricedotwho.rsm.utils.ItemUtils;
@@ -44,6 +45,7 @@ public class ItemModifierGui extends Screen implements Accessor {
 
     private float scroll = 0f;
     private boolean clickHandled = false;
+    private static boolean clickConsumed = false;
 
     private final List<ItemModifierRow> rows = new ArrayList<>();
 
@@ -125,6 +127,8 @@ public class ItemModifierGui extends Screen implements Accessor {
 
         NVGUtils.pushScissor(x, start, WIDTH, RENDER_SECTION_HEIGHT);
 
+        List<Runnable> expanded = new ArrayList<>();
+
         for (ItemModifierRow row : rows) {
             if (y < start - 40f) {
                 y += 40f;
@@ -132,11 +136,20 @@ public class ItemModifierGui extends Screen implements Accessor {
             }
 
             row.render(gfx, x, y, mouseX, mouseY);
+
+            // YES we render twice NO I don't care about your frames
+            if (row.isExpanded()) {
+                float finalY = y;
+                expanded.add(() -> row.render(gfx, x, finalY, mouseX, mouseY));
+            }
+
             y += 40f;
             if (y > start + RENDER_SECTION_HEIGHT + 20f) {
                 break;
             }
         }
+
+        expanded.forEach(Runnable::run);
 
         NVGUtils.popScissor();
     }
@@ -172,9 +185,14 @@ public class ItemModifierGui extends Screen implements Accessor {
         return super.keyPressed(input);
     }
 
+    public static void consumeClick() {
+        clickConsumed = true;
+    }
+
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         clickHandled = false;
+        clickConsumed = false;
 
         float scale = RSMConfig.getStandardGuiScale();
         double mouseX = MouseUtils.mouseX() / scale;
@@ -206,6 +224,7 @@ public class ItemModifierGui extends Screen implements Accessor {
                 rows.remove(i);
                 break;
             }
+            if (clickConsumed) break;
 
             y += 40f;
             if (y > getPosition().y + 100f + RENDER_SECTION_HEIGHT + 20f) {

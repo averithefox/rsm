@@ -221,12 +221,12 @@ public class VisualWordRow {
 
     private Colour inputColour(boolean writing, boolean hovering) {
         if (writing) {
-            return new Colour(60, 60, 60);
+            return FatalityColours.WRITING_TEXT;
         }
         if (hovering) {
-            return new Colour(50, 50, 50);
+            return FatalityColours.HOVERING_TEXT;
         }
-        return new Colour(40, 40, 40);
+        return FatalityColours.INPUT_TEXT;
     }
 }
 

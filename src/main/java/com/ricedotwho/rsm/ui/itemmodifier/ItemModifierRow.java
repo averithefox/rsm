@@ -6,6 +6,7 @@ import com.ricedotwho.rsm.data.Colour;
 import com.ricedotwho.rsm.ui.clickgui.api.FatalityColours;
 import com.ricedotwho.rsm.ui.clickgui.impl.module.settings.impl.ColourValueComponent;
 import com.ricedotwho.rsm.ui.clickgui.impl.module.settings.impl.TextInput;
+import com.ricedotwho.rsm.utils.StringUtils;
 import com.ricedotwho.rsm.utils.render.render2d.Gradient;
 import com.ricedotwho.rsm.utils.render.render2d.NVGUtils;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.awt.*;
 
 import static com.ricedotwho.rsm.ui.clickgui.impl.module.ModuleComponent.focusedComponent;
 import static com.ricedotwho.rsm.ui.clickgui.impl.module.settings.impl.ColourValueComponent.*;
+import static com.ricedotwho.rsm.ui.itemmodifier.ItemModifierGui.consumeClick;
 
 public class ItemModifierRow {
     private static final float WIDTH = 818f;
@@ -25,6 +27,7 @@ public class ItemModifierRow {
     private static final float BOX_HEIGHT = 20f;
     private static final float UUID_WIDTH = 300f;
     private static final float NAME_WIDTH = 300f;
+    private static final float NAME_WIDTH_NO_COLOUR = 365f;
     private static final float COLOUR_WIDTH = 65f;
     private static final float BUTTON_WIDTH = 66f;
     private static final float DELETE_WIDTH = 67f;
@@ -39,6 +42,7 @@ public class ItemModifierRow {
     private final TextInput nameInput;
     private boolean writingName = false;
 
+    @Getter
     private boolean expanded = false;
     private boolean draggingSB = false;
     private boolean draggingHue = false;
@@ -57,16 +61,19 @@ public class ItemModifierRow {
         float nameX = GAP + UUID_WIDTH + GAP;
         float colourX;
         float enabledX;
+        float nameWidth;
         if (value.colour == null) {
             colourX = 0;
-            enabledX = nameX + NAME_WIDTH + GAP;
+            nameWidth = NAME_WIDTH_NO_COLOUR;
+            enabledX = nameX + nameWidth + GAP;
         } else {
-            colourX = nameX + NAME_WIDTH + GAP;
+            nameWidth = NAME_WIDTH;
+            colourX = nameX + nameWidth + GAP;
             enabledX = colourX + COLOUR_WIDTH + GAP;
         }
         float deleteX = enabledX + BUTTON_WIDTH + GAP;
 
-        if (NVGUtils.isHovering(mouseX, mouseY, nameX, GAP, NAME_WIDTH, BOX_HEIGHT)) {
+        if (NVGUtils.isHovering(mouseX, mouseY, nameX, GAP, nameWidth, BOX_HEIGHT)) {
             selected = this;
             writingName = true;
             nameInput.click((float) (mouseX - (nameX + 5f)), button);
@@ -77,6 +84,24 @@ public class ItemModifierRow {
         }
 
         if (value.colour != null) {
+
+            if (button == 0 && NVGUtils.isHovering(mouseX, mouseY, colourX, GAP, COLOUR_WIDTH, BOX_HEIGHT)) {
+                // item modifier row larping as ColourValueComponent
+                if (expandedInstance != null && expandedInstance != this) {
+                    expandedInstance.expanded = false;
+                }
+                expanded = !expanded;
+                if (expanded) {
+                    expandedInstance = this;
+                } else {
+                    expandedInstance = null;
+                }
+                consumeClick();
+                writing = false;
+                return false;
+            }
+
+
             if (expanded && button == 0) {
                 float boxX = colourX + COLOUR_WIDTH / 2;
                 float hueX = boxX + BOX_SIZE + 10;
@@ -91,6 +116,12 @@ public class ItemModifierRow {
                 float stringX = boxX + (bgwidth - 50) / 2f;
                 float stringY = boxY + 106;
 
+                if (NVGUtils.isHovering(mouseX, mouseY, boxX - 4, boxY - 4, bgwidth + 4, 128)) {
+                    consumeClick();
+                }
+
+                boolean hoveringInput = NVGUtils.isHovering(mouseX, mouseY, stringX, stringY, 65, 18);
+
                 if (NVGUtils.isHovering(mouseX, mouseY, (int) boxX, (int) boxY, BOX_SIZE, BOX_SIZE)) {
                     updateSB(relX, relY, value.colour);
                     draggingSB = true;
@@ -100,7 +131,7 @@ public class ItemModifierRow {
                 } else if (NVGUtils.isHovering(mouseX, mouseY, (int) alphaX, (int) y, HUE_STRIP_WIDTH, BOX_SIZE)) {
                     updateAlpha(relY, value.colour);
                     draggingAlpha = true;
-                } else {
+                } else if (!hoveringInput) {
                     // clicking outside closes the picker
                     expanded = false;
                     writing = false;
@@ -112,7 +143,7 @@ public class ItemModifierRow {
                     }
                 }
 
-                if (NVGUtils.isHovering(mouseX, mouseY, stringX, stringY, 65, 18)) {
+                if (hoveringInput) {
                     if (focusedComponent != null) focusedComponent.writing = false;
                     focusedComponent = this;
                     writing = true;
@@ -123,21 +154,6 @@ public class ItemModifierRow {
                         focusedComponent = null;
                     }
                 }
-            }
-
-            if (button == 0 && NVGUtils.isHovering(mouseX, mouseY, colourX, GAP, COLOUR_WIDTH, BOX_HEIGHT)) {
-                // item modifier row larping as ColourValueComponent
-                if (expandedInstance != null && expandedInstance != this) {
-                    expandedInstance.expanded = false;
-                }
-                expanded = !expanded;
-                if (expanded) {
-                    expandedInstance = this;
-                } else {
-                    expandedInstance = null;
-                }
-                writing = false;
-                return false;
             }
         }
 
@@ -169,7 +185,6 @@ public class ItemModifierRow {
     }
 
     public boolean keyTyped(KeyEvent event) {
-
         int key = event.key();
         if ((writingName || writing) && key == GLFW.GLFW_KEY_ESCAPE) {
             if (writing) {
@@ -210,20 +225,23 @@ public class ItemModifierRow {
 
         float colourX;
         float enabledX;
+        float nameWidth;
         if (value.colour == null) {
             colourX = 0;
-            enabledX = nameX + NAME_WIDTH + GAP;
+            nameWidth = NAME_WIDTH_NO_COLOUR;
+            enabledX = nameX + nameWidth + GAP;
         } else {
-            colourX = nameX + NAME_WIDTH + GAP;
+            nameWidth = NAME_WIDTH;
+            colourX = nameX + nameWidth + GAP;
             enabledX = colourX + COLOUR_WIDTH + GAP;
         }
         float deleteX = enabledX + BUTTON_WIDTH + GAP;
 
-        NVGUtils.drawRect(uuidX, y + GAP, UUID_WIDTH, BOX_HEIGHT, new Colour(40, 40, 40));
+        NVGUtils.drawRect(uuidX, y + GAP, UUID_WIDTH, BOX_HEIGHT, FatalityColours.INPUT_TEXT);
         NVGUtils.drawText(uuid, uuidX + 5f, y + HEIGHT / 2f - 2f, 11, FatalityColours.TEXT, NVGUtils.JOSEFIN);
 
-        Colour nameColour = inputColour(writingName, NVGUtils.isHovering(mouseX, mouseY, nameX, y + GAP, NAME_WIDTH, BOX_HEIGHT));
-        NVGUtils.drawRect(nameX, y + GAP, NAME_WIDTH, BOX_HEIGHT, nameColour);
+        Colour nameColour = inputColour(writingName, NVGUtils.isHovering(mouseX, mouseY, nameX, y + GAP, nameWidth, BOX_HEIGHT));
+        NVGUtils.drawRect(nameX, y + GAP, nameWidth, BOX_HEIGHT, nameColour);
         nameInput.render(nameX + 5f, y + HEIGHT / 2f - 4f, writingName);
 
         boolean enabledHovered = NVGUtils.isHovering(mouseX, mouseY, enabledX, y + GAP, BUTTON_WIDTH, BOX_HEIGHT);
@@ -246,11 +264,11 @@ public class ItemModifierRow {
         // pmopmopmopmop[mmop
         if (value.colour != null) {
             Colour colour = NVGUtils.isHovering(mouseX, mouseY, colourX, y + GAP, COLOUR_WIDTH, BOX_HEIGHT) ? value.colour.brighter() : value.colour;
-            NVGUtils.drawRect(colourX, y, COLOUR_WIDTH, BOX_HEIGHT, 1, colour);
+            NVGUtils.drawRect(colourX, y + GAP, COLOUR_WIDTH, BOX_HEIGHT, 1, colour);
 
             if (expanded) {
                 // ar ar ar fredy faze bear
-                renderStupidFuckingColourThing(mouseX, mouseY, colourX + COLOUR_WIDTH / 2, y + BOX_HEIGHT / 2);
+                renderStupidFuckingColourThing(mouseX, mouseY, colourX + COLOUR_WIDTH / 2, y + GAP);
             }
         }
     }
@@ -262,11 +280,11 @@ public class ItemModifierRow {
 
         float hueX = boxX + BOX_SIZE + 10;
         float alphaX = hueX + HUE_STRIP_WIDTH + 10;
-        float boxY = sbY + BASE_HEIGHT + 4;
+        float boxY = sbY + BASE_HEIGHT / 2 + 4;
 
         NVGUtils.drawRect(boxX - 4, boxY - 4, bgWidth + 4, 128, 2, FatalityColours.PANEL);
 
-        renderOverlay(mouseX, mouseY, sbX, sbY);
+        renderOverlay(mouseX, mouseY, sbX, boxY);
 
         NVGUtils.drawGradientRect(boxX, boxY, BOX_SIZE, BOX_SIZE - 1, 5f, Colour.WHITE, value.colour.hsbMax(), Gradient.LeftToRight);
         NVGUtils.drawGradientRect(boxX, boxY, BOX_SIZE, BOX_SIZE, 5f, Colour.TRANSPARENT, Colour.BLACK, Gradient.TopToBottom);
@@ -339,26 +357,27 @@ public class ItemModifierRow {
     }
 
     private void commitName() {
-        String nextName = nameInput.getValue().trim();
+        String nextName = StringUtils.format(nameInput.getValue().trim());
         if (nextName.isBlank()) {
-            nameInput.setValue(value.name);
+            nameInput.setValue(StringUtils.format(value.name));
             return;
         }
 
         if (!nextName.equals(value.name)) {
             value.name = nextName;
+            nameInput.setValue(nextName);
             ItemModifierStore.save();
         }
     }
 
     private Colour inputColour(boolean writing, boolean hovering) {
         if (writing) {
-            return new Colour(60, 60, 60);
+            return FatalityColours.WRITING_TEXT;
         }
         if (hovering) {
-            return new Colour(50, 50, 50);
+            return FatalityColours.HOVERING_TEXT;
         }
-        return new Colour(40, 40, 40);
+        return FatalityColours.INPUT_TEXT;
     }
 }
 

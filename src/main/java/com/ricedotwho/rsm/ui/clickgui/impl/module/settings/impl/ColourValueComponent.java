@@ -110,11 +110,11 @@ public class ColourValueComponent extends InputValueComponent<ColourSetting> {
         boolean hovered = NVGUtils.isHovering(mouseX, mouseY, (int) stringX - 10f, (int) stringY - 2, 65, 18);
         Colour boxColor;
         if (writing) {
-            boxColor = new Colour(60, 60, 60);
+            boxColor = FatalityColours.WRITING_TEXT;
         } else if (hovered) {
-            boxColor = new Colour(50, 50, 50);
+            boxColor = FatalityColours.HOVERING_TEXT;
         } else {
-            boxColor = new Colour(40, 40, 40);
+            boxColor = FatalityColours.INPUT_TEXT;
         }
 
         NVGUtils.drawRect(stringX - 10f, stringY - 2, 65f, 18f, 2, boxColor);
@@ -170,6 +170,8 @@ public class ColourValueComponent extends InputValueComponent<ColourSetting> {
             consumeClick();
         }
 
+        boolean hoveringInput = NVGUtils.isHovering(mouseX, mouseY, stringX, stringY, 65, 18);
+
         if (NVGUtils.isHovering(mouseX, mouseY, (int) boxX, (int) boxY, BOX_SIZE, BOX_SIZE)) {
             updateSB(relX, relY, setting.getValue());
             draggingSB = true;
@@ -179,7 +181,7 @@ public class ColourValueComponent extends InputValueComponent<ColourSetting> {
         } else if (NVGUtils.isHovering(mouseX, mouseY, (int) alphaX, (int) y, HUE_STRIP_WIDTH, BOX_SIZE)) {
             updateAlpha(relY, setting.getValue());
             draggingAlpha = true;
-        } else {
+        } else if (!hoveringInput) {
             // clicking outside closes the picker
             expanded = false;
             writing = false;
@@ -191,7 +193,7 @@ public class ColourValueComponent extends InputValueComponent<ColourSetting> {
             }
         }
 
-        if (NVGUtils.isHovering(mouseX, mouseY, stringX, stringY, 65, 18)) {
+        if (hoveringInput) {
             if (focusedComponent != null) focusedComponent.writing = false;
             focusedComponent = this;
             writing = true;
