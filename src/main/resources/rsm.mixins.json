@@ -23,6 +23,7 @@
     "MixinGameRenderer",
     "MixinGui",
     "MixinItemInHandsRenderer",
+    "MixinItemStack",
     "MixinKeyboardHandler",
     "MixinKeyboardInput",
     "MixinLocalPlayer",
