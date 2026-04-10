@@ -34,12 +34,12 @@ public abstract class MixinCamera {
         new CameraSetupEvent().post();
     }
 
-    @Redirect(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", ordinal = 1))
+    @Redirect(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V"))
     private void setCameraYawPitch(Camera camera, float yaw, float pitch) {
         this.setRotation(CameraHandler.getYaw(yaw), CameraHandler.getPitch(pitch));
     }
 
-    @Inject(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setPosition(DDD)V", shift = At.Shift.AFTER)) //noamm redirects so we just change again after
+    @Inject(method = "setup", at = @At("TAIL"))
     private void setCameraPos(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
         this.setPosition(CameraHandler.getPos(new Vec3(this.position.x, this.position.y, this.position.z)));
     }
