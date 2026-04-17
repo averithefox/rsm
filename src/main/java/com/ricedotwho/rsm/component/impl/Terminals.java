@@ -138,6 +138,7 @@ public class Terminals extends ModComponent {
     }
 
     // should only run when the packet is cancelled, just so we actually know what the terms solution is if the player is invwalking
+    @Deprecated
     @SubscribeEvent
     public void onSetSlot(TerminalEvent.PreSetSlot event) {
         if (current != null && screenCancelled) current.onSlot(event.getSlot(), event.getStack());

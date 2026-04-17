@@ -22,6 +22,7 @@ import java.util.*;
 
 @Getter
 public abstract class Term implements Accessor {
+    @Getter
     protected static final Map<Integer, ItemStack> packetItems = new HashMap<>();
     public final Map<Integer, Pair<TermSol, Long>> clickedSlots = new HashMap<>();
     protected final List<TermSol> rawSolution = new ArrayList<>();
