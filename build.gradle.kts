@@ -2,6 +2,11 @@ plugins {
   `maven-publish`
   id("net.fabricmc.fabric-loom-remap")
   id("com.gradleup.shadow") version "9.4.1"
+  id("com.github.jmongard.git-semver-plugin") version "0.18.0"
+}
+
+semver {
+  groupVersionIncrements = false
 }
 
 val modVersion: String by project
@@ -11,8 +16,8 @@ val loaderVersion: String by project
 val fabricApiVersion: String by project
 val lwjglVersion: String by project
 
-version = modVersion
-group = mavenGroup
+version = semver.infoVersion
+group = "com.ricedotwho"
 
 val shadowApi by configurations.creating {
   configurations.api {
