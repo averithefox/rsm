@@ -13,7 +13,7 @@ val fabricApiVersion: String by project
 val lwjglVersion: String by project
 
 version = semver.version
-group = "com.ricedotwho"
+group = "me.averi"
 
 val shadowApi by configurations.creating {
   configurations.api {
