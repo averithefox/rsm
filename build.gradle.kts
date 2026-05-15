@@ -5,10 +5,6 @@ plugins {
   id("com.github.jmongard.git-semver-plugin") version "0.18.0"
 }
 
-semver {
-  groupVersionIncrements = false
-}
-
 val modVersion: String by project
 val mavenGroup: String by project
 val minecraftVersion: String by project
@@ -16,7 +12,7 @@ val loaderVersion: String by project
 val fabricApiVersion: String by project
 val lwjglVersion: String by project
 
-version = semver.infoVersion
+version = semver.version
 group = "com.ricedotwho"
 
 val shadowApi by configurations.creating {
