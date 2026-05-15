@@ -15,8 +15,8 @@ val lwjglVersion: String by project
 version = semver.version
 group = "me.averi"
 
-val shadowApi by configurations.creating {
-  configurations.api {
+val shadowImplementation by configurations.creating {
+  configurations.implementation {
     extendsFrom(this@creating)
   }
 }
@@ -28,9 +28,9 @@ dependencies {
 
   modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
 
-  shadowApi("org.lwjgl:lwjgl-nanovg:${lwjglVersion}")
+  shadowImplementation("org.lwjgl:lwjgl-nanovg:${lwjglVersion}")
   listOf("windows", "linux", "macos", "macos-arm64").forEach {
-    shadowApi("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$it")
+    shadowImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$it")
   }
 
   annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -58,7 +58,7 @@ tasks {
     archiveClassifier = "dev-shadow"
     destinationDirectory = layout.buildDirectory.dir("badjars")
 
-    configurations = listOf(shadowApi)
+    configurations = listOf(shadowImplementation)
 
     minimize()
 
@@ -81,8 +81,7 @@ java {
 publishing {
   publications {
     create<MavenPublication>("maven") {
-      artifact(tasks.remapJar)
-      artifact(tasks.remapSourcesJar)
+      from(components["java"])
     }
   }
 
