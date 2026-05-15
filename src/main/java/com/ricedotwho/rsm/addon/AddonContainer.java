@@ -25,9 +25,9 @@ public class AddonContainer {
         this.cl = cl;
         this.meta = meta;
         this.hasMixin = hasMixin;
-        this.modules = AddonLoader.instantiate(addon.getModules());
-        this.commands = AddonLoader.instantiate(addon.getCommands());
-        this.components = AddonLoader.instantiate(addon.getComponents());
+        this.modules = addon.getModules();
+        this.commands = addon.getCommands();
+        this.components = addon.getComponents();
     }
 
     public void load(boolean reload) {

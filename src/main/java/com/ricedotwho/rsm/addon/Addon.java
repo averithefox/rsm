@@ -12,9 +12,9 @@ public interface Addon {
 
     void onUnload();
 
-    List<Class<? extends Module>> getModules();
+    List<Module> getModules();
 
-    List<Class<? extends ModComponent>> getComponents();
+    List<ModComponent> getComponents();
 
-    List<Class<? extends Command>> getCommands();
+    List<Command> getCommands();
 }

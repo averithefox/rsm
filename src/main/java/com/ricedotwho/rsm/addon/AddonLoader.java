@@ -207,17 +207,4 @@ public class AddonLoader {
             }
         }
     }
-
-    public static <T> List<T> instantiate(List<Class<? extends T>> types) {
-        List<T> ret = new ArrayList<>();
-        for (Class<? extends T> type : types) {
-            try {
-                ret.add(type.getDeclaredConstructor().newInstance());
-            } catch (ReflectiveOperationException e) {
-                RSM.getLogger().error("Failed to instantiate {}", type.getSimpleName(), e);
-                ChatUtils.chat(ChatFormatting.RED + "Failed to instantiate %s", type.getSimpleName());
-            }
-        }
-        return ret;
-    }
 }
