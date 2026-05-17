@@ -28,9 +28,9 @@ dependencies {
 
   modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
 
-  shadowImplementation("org.lwjgl:lwjgl-nanovg:${lwjglVersion}")
+  shadowImplementation("org.lwjgl:lwjgl-nanovg:${lwjglVersion}") { isTransitive = false }
   listOf("windows", "linux", "macos", "macos-arm64").forEach {
-    shadowImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$it")
+    shadowImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$it") { isTransitive = false }
   }
 
   annotationProcessor("org.projectlombok:lombok:1.18.32")
@@ -67,7 +67,6 @@ tasks {
 
   remapJar {
     archiveClassifier = null
-    from(shadowJar)
     inputFile = shadowJar.get().archiveFile
   }
 }
